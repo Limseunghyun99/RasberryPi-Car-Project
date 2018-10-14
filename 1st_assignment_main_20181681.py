@@ -1,12 +1,3 @@
-#########################################################################
-# Date: 2018/08/09
-# file name: 1st_assignment_main.py
-# Purpose: this code has been generated for the 4 wheels drive body
-# moving object to perform the project with ultra sensor
-# this code is used for the student only
-#########################################################################
-
-
 # =======================================================================
 # import GPIO library and time module
 # =======================================================================
@@ -33,7 +24,6 @@ from SR02 import SR02_Ultrasonic as Ultrasonic_Sensor
 # =======================================================================
 import rear_wheels
 import front_wheels
-
 # =======================================================================
 #  set GPIO warnings as false
 # =======================================================================
@@ -58,24 +48,33 @@ class Car(object):
     # Complete the code to perform First Assignment
     # =======================================================================
     def assignment_main(self):
-        # Implement the assignment code here.
-        # Example Of Real Motor Control
+        #=================================================================
+        #Variable
+        #=================================================================
 
-        driving_controller = rear_wheels.Rear_Wheels(db='config')
-        distance_detector = Ultrasonic_Sensor.Ultrasonic_Avoidance(35)
+        handle = front_wheels.Front_Wheels(db = 'config')
+        distance = self.distance_detector.get_distance()
+        accelerator = rear_wheels.Rear_Wheels(db='config')
 
-        driving_controller.ready()
-        start = time.time()
-        while ((distance_detector.get_distance() < 0) or (distance_detector.get_distance() > 15)) :
-            driving_controller.forward_with_speed(50)
-        end = time.time()
-        driving_controller.stop()
-        time.sleep(0.5)
-        driving_controller.backward_with_speed(30)
-        time.sleep(end - start)
+        accelerator.ready()
 
-        driving_controller.stop()
-        driving_controller.power_down()
+        start_time = time.time()
+
+        while(distance >25 or distance < 0):
+            accelerator.forward_with_speed(70)
+            distance = self.distance_detector.get_distance()
+            time.sleep(0.20)
+            print(distance)
+            if(distance < 25 and distance >0):
+                print("Too close")
+                end_time = time.time()
+                accelerator.stop()
+                accelerator.backward_with_speed(80)
+                time.sleep(end_time - start_time)
+                accelerator.stop()
+                handle.turn_straight()
+
+
 
     def moduleInitialize(self):
         try:
