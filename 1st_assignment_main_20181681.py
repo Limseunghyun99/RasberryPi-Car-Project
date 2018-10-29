@@ -53,25 +53,39 @@ class Car(object):
         #=================================================================
 
         handle = front_wheels.Front_Wheels(db = 'config')
+        #초음파 센서로 부터 거리값을 받아와 distance에 저장합니다.
         distance = self.distance_detector.get_distance()
+        #뒷바퀴 오브젝트를 accelerator로 받아옵니다.
         accelerator = rear_wheels.Rear_Wheels(db='config')
-
+        #뒷바퀴를 준비시킵니다.
         accelerator.ready()
-
+        #시간 측정을 위해 시간을 저장합니다.
         start_time = time.time()
-
+        #거리가 아직 먼 경우에 반복하고 너무 먼 경우 -1이 리턴 되므로 하나의 경우를 더 처리합니다.
         while(distance >25 or distance < 0):
+            #70의 속도로 전진합니다.
             accelerator.forward_with_speed(70)
+            #distance값을 계속 받아옵니다.
             distance = self.distance_detector.get_distance()
+            #간격을 두지 않았더니 값이 계속 튀어서 0.2초의 간격을 두었습니다.
             time.sleep(0.20)
+            #에코 체킹을 위해 거리값을 출력합니다.
             print(distance)
+            #만약 거리가 너무 가가까워진 경우
             if(distance < 25 and distance >0):
+                #사용자에게 거리가 가까움을 출력합니다.
                 print("Too close")
+                #진행하는 동안 걸린 시간을 측정합니다,
                 end_time = time.time()
+                #차를 멈추고
                 accelerator.stop()
+                #후진
                 accelerator.backward_with_speed(80)
+                #주행하는데 걸린 시간만큼 후진합니다.
                 time.sleep(end_time - start_time)
+                #정지
                 accelerator.stop()
+                #앞바퀴 정렬
                 handle.turn_straight()
 
 

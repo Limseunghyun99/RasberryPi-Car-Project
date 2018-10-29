@@ -48,27 +48,30 @@ class Car(object):
     # Complete the code to perform First Assignment
     # =======================================================================
     def assignment_main(self):
-        try:
-            #=================================================================
-            #Variable
-            #=================================================================
+        #=================================================================
+        #Variable
+        #=================================================================
 
-            handle = front_wheels.Front_Wheels(db = 'config')
+        handle = front_wheels.Front_Wheels(db = 'config')
+        distance = self.distance_detector.get_distance()
+        accelrator = rear_wheels.Rear_Wheels(db='config')
+
+        self.rear_wheels_drive.ready()
+        self.rear_wheels_drive.forward_with_speed(50)
+
+        start_time = time.time()
+
+        while(distance > 20):
             distance = self.distance_detector.get_distance()
-            accelrator = rear_wheels.Rear_Wheels(db='config')
+            time.sleep(0.5)
+            if(distance <= 20):
+                print("Too close")
+                end_time = time.time()
+                self.rear_wheels_drive.stop()
+                self.rear_wheels_drive.backward_with_speed(50)
+                time.sleep(end_time - start_time)
 
-            accelrator.ready()
-            accelrator.forward_with_speed(50)
 
-            while(distance > 20):
-                distance = self.distance_detector.get_distance()
-                time.sleep(0.5)
-                if(distance <= 20):
-                    print("Too close")
-                    self.rear_wheels_drive.stop()
-                    accelrator.backward_with_speed(50)
-                
-        pass
 
     def moduleInitialize(self):
         try:
