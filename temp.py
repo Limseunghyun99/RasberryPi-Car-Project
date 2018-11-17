@@ -37,7 +37,7 @@ class myCar(object):
                 continue
             if distance <= 20:
                 count += 1
-            if count >= 10:
+            if count >= 5:
                 self.car.accelerator.stop()
                 self.car.steering.turn_left(55)
                 self.car.accelerator.go_forward(50)
