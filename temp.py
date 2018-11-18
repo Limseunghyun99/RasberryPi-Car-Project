@@ -37,13 +37,13 @@ class myCar(object):
                 self.car.steering.turn(43)
                 self.car.accelerator.go_forward(40)
                 time.sleep(0.5)
-                    while self.car.line_detector.read_digital() != [1,0,0,0,0]:
-                        self.car.accelerator.go_forward(60)
-                    self.car.steering.turn(120)
-                    self.car.accelerator.go_forward(50)
-                    time.sleep(1.5)
-                    while self.car.line_detector.read_digital()[4] == 0:
-                        self.car.accelerator.go_forward(60)
+                while self.car.line_detector.read_digital() != [1,0,0,0,0]:
+                    self.car.accelerator.go_forward(60)
+                self.car.steering.turn(120)
+                self.car.accelerator.go_forward(50)
+                time.sleep(1.5)
+                while self.car.line_detector.read_digital()[4] == 0:
+                    self.car.accelerator.go_forward(60)
                     
                 
             if(self.car.line_detector.read_digital() == [0,0,1,0,0]):
