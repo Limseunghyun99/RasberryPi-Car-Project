@@ -12,11 +12,12 @@ class myCar(object):
 
     def __init__(self, car_name):
         self.car = Car(car_name)
-        self.car.steering.turning_max = 40
+        #self.car.steering.turning_max = 50
         self.color = self.car.color_getter
         self.line = self.car.line_detector
-        self.average_speed = 70
+        self.average_speed = 75
         self.flag = True
+        self.dead_flag = True
         self.buzzer = Buzzer.Buzz()
         
 
@@ -24,61 +25,77 @@ class myCar(object):
         self.car.drive_parking()
 
     def side_parking(self):
-        self.adequate_time = 2
+        self.adequate_time = 1.5
         self.car.steering.turn(110)
         self.car.accelerator.go_forward(60)
-        time.sleep(0.5)
-        #self.car.accelerator.stop()
-        #self.car.steering.turn(90)
+        time.sleep(0.4)
+        self.car.accelerator.stop()
+        self.car.steering.turn(90)
+        #self.car.accelerator.go_backward(30)
+        #time.sleep(0.6)
         self.car.accelerator.rightLarge()
         time.sleep(self.adequate_time)
         self.car.accelerator.stop()
         time.sleep(1)
-
         self.car.steering.turn(70)
         self.car.accelerator.leftLarge()
         time.sleep(self.adequate_time)
         #self.car.steering.turn(70)
-        self.car.steering.turn(90)
-        self.car.accelerator.go_forward(70)
+        self.car.steering.turn(85)
+        self.car.accelerator.go_forward(60)
         time.sleep(1)
+        
         self.car.accelerator.stop()
 
     def line_tracing(self):
         if self.line.read_digital() == [0, 0, 1, 0, 0]:
             self.car.accelerator.go_forward(self.average_speed)
             
-        elif self.line.read_digital()[0] == 1 :
-            self.car.steering.turn(60)
+        elif self.line.read_digital() == [0,1,1,1,1] :
+            self.car.steering.turn(70)
             self.car.accelerator.go_forward(self.average_speed)
+
+        elif self.line.read_digital()[0] == 1 :
+            self.car.steering.turn(70)
+            self.car.accelerator.go_forward(self.average_speed)
+            return
 
         elif self.line.read_digital()[1] == 1:
             self.car.steering.turn(80)
             self.car.accelerator.go_forward(self.average_speed)
+            return
 
         elif self.line.read_digital()[3] == 1:
             self.car.steering.turn(100)
             self.car.accelerator.go_forward(self.average_speed)
+            return
 
         elif self.line.read_digital()[4] == 1:
             self.car.steering.turn(110)
-            self.car.accelerator.go_forward(self.average_speed) 
+            self.car.accelerator.go_forward(self.average_speed)
+            return
 
         elif self.line.read_digital() == [0, 0, 0, 0, 0]:
-            self.car.steering.turn(100)
+            self.car.steering.turn(110)
             self.car.accelerator.go_backward(40)
+            return
             #time.sleep(0.33)
             #self.car.accelerator.stop()
 
         elif self.car.line_detector.read_digital() == [1, 1, 1, 1, 1] :
             self.car.accelerator.stop()
+            return
+            #time.sleep(10)
 
         else:
             self.car.steering.turn(90)
             self.car.accelerator.go_forward(self.average_speed)
+            time.sleep(0.05)
+            pass
         
 
     def avoidence(self):
+        self.dead_flag = False
         self.car.accelerator.stop()
         self.car.steering.turn(70)
         self.car.accelerator.go_forward(70)
@@ -108,7 +125,7 @@ class myCar(object):
                 temp.sort()
 
             # 장애물 회피
-            if 0 < temp[2] < 35:
+            if 0 < temp[2] < 31 and self.dead_flag:
                 self.avoidence()
 
             # 신호등
@@ -128,7 +145,7 @@ class myCar(object):
                 self.side_parking()   
             
 
-            time.sleep(0.07) 
+            
 
 
 
