@@ -3,6 +3,8 @@
 # project with line detector this code is used for the student only
 #########################################################################
 import Buzzer
+import Led
+import Buzzer_Elise
 from car import Car
 import time
 
@@ -18,7 +20,8 @@ class myCar(object):
         self.average_speed = 70
         self.flag = True
         self.buzzer = Buzzer.Buzz()
-        
+        self.led = Led.LED()
+        self.song = Buzzer_Elise.Elise()
 
     def drive_parking(self):
         self.car.drive_parking()
@@ -31,6 +34,9 @@ class myCar(object):
         #self.car.accelerator.stop()
         #self.car.steering.turn(90)
         self.car.accelerator.rightLarge()
+        
+        self.song.song_play()
+        
         time.sleep(self.adequate_time)
         self.car.accelerator.stop()
         time.sleep(1)
@@ -121,7 +127,8 @@ class myCar(object):
             #바닥 인식
             if self.car.color_getter.green_signal():
                 frequency = self.color.color_to_frequency()
-                #self.buzzer.on_off(frequency)
+                self.buzzer.on_off(frequency)
+                self.led.on_off(frequency)
 
             #평면 주차
             if self.car.color_getter.blue_signal():
