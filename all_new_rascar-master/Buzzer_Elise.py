@@ -23,7 +23,7 @@ class Elise:
         buzzer_pin 을 GPIO 출력으로 설정합니다. 이를 통해 led_pin으로
         True 혹은 False를 쓸 수 있게 됩니다.
         """
-        GPIO.setup(buzzer_pin, GPIO.OUT)
+        GPIO.setup(self.buzzer_pin, GPIO.OUT)
 
     def song_play():
         # Elise
@@ -34,7 +34,7 @@ class Elise:
 
 
         try:
-            p = GPIO.PWM(buzzer_pin, 100)
+            p = GPIO.PWM(self.buzzer_pin, 100)
             p.start(5)     # start the PWM on 5% duty cycle
 
             for i in range(len(list)):
