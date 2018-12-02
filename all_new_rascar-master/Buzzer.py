@@ -35,6 +35,7 @@ class Buzz:
         GPIO.setup(self.buzzer_pin, GPIO.OUT)
 
     def on_off(self, frequency):
+        GPIO.setup(self.buzzer_pin, GPIO.OUT)
         p = GPIO.PWM(self.buzzer_pin, 100)
         p.start(5)     # start the PWM on 5% duty cycle
 
