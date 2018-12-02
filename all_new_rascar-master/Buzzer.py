@@ -14,34 +14,27 @@ import time
 import RPi.GPIO as GPIO
 
 
-class Buzz:
-    def __init__(self):
-        # Raspberry Pi의 핀 번호를 의미합니다.
-        self.buzzer_pin = 8
+# Raspberry Pi의 핀 번호를 의미합니다.
+buzzer_pin = 8
     
-        # Raspberry Pi의 핀 순서를 사용하도록 설정합니다.
-        GPIO.setmode(GPIO.BOARD)
+# Raspberry Pi의 핀 순서를 사용하도록 설정합니다.
+GPIO.setmode(GPIO.BOARD)
 
-        """
-        음계별 표준 주파수
-        [ 도, 레, 미, 파, 솔, 라, 시, 도]
-        """
-        self.scale = [261.6, 293.6, 329.6, 349.2, 391.9, 440.0, 493.8, 523.2]
+"""
+음계별 표준 주파수
+[ 도, 레, 미, 파, 솔, 라, 시, 도]
+"""
+scale = [261.6, 293.6, 329.6, 349.2, 391.9, 440.0, 493.8, 523.2]
+"""
+buzzer_pin 을 GPIO 출력으로 설정합니다. 이를 통해 led_pin으로
+True 혹은 False를 쓸 수 있게 됩니다.
+"""
+GPIO.setup(buzzer_pin, GPIO.OUT)
 
-        """
-        buzzer_pin 을 GPIO 출력으로 설정합니다. 이를 통해 led_pin으로
-        True 혹은 False를 쓸 수 있게 됩니다.
-        """
-        GPIO.setup(self.buzzer_pin, GPIO.OUT)
+p = GPIO.PWM(buzzer_pin, 100)
+p.start(5)     # start the PWM on 5% duty cycle
 
-    def on_off(self, frequency):
-        GPIO.setup(self.buzzer_pin, GPIO.OUT)
-        p = GPIO.PWM(self.buzzer_pin, 100)
-        p.start(5)     # start the PWM on 5% duty cycle
+p.ChangeFrequency(scale[6])
+p.stop()  # stop the PWM output
 
-        p.ChangeFrequency(self.scale[6])
-        time.sleep(frequency)
-        p.stop()  # stop the PWM output
-
-        
-        GPIO.cleanup()
+GPIO.cleanup()

@@ -35,7 +35,7 @@ class myCar(object):
         self.car.steering.turn(90)
         #self.car.accelerator.go_backward(30)
         #time.sleep(0.6)
-        self.car.accelerator.rightLarge()
+        self.car.accelerator.leftLarge()
         time.sleep(self.adequate_time-0.2)
         self.car.accelerator.stop()
         time.sleep(1)

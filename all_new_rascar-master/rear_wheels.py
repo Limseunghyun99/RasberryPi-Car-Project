@@ -94,8 +94,8 @@ class Rear_Wheels(object):
 
     def rightLarge(self):
         self.speed = 100
-        self.left_wheel.backward()
-        self.right_wheel.forward()
+        self.left_wheel.forward()
+        self.right_wheel.backward()
 
     @property
     def speed(self, speed):

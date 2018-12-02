@@ -2,6 +2,8 @@
 # generated for the 4 wheel drive body moving object to perform the 
 # project with line detector this code is used for the student only
 #########################################################################
+import sys
+sys.path.append('/home/pi/.local/lib/python3.5/site-packages')
 import Buzzer_Yes
 import Led_module_Yes
 from car import Car
@@ -20,6 +22,7 @@ class myCar(object):
         self.average_speed = 75
         self.flag = True
         self.dead_flag = True
+        self.finished = False
         self.buzzer = Buzzer_Yes.Buzz()
         self.led = Led_module_Yes.Led()
 
@@ -27,36 +30,51 @@ class myCar(object):
         while True:
             if keyboard.is_pressed('w'):
                 if keyboard.is_pressed('a'):
-                    self.car.steering.turn(80)
-                    self.car.accelerator.go_forward(60)
-                    break;
+                    self.car.steering.turn(75)
+                    self.car.accelerator.go_forward(70)
+                    continue
                 elif keyboard.is_pressed('d'):
-                    self.car.steering.turn(100)
-                    self.car.accelerator.go_forward(60)
+                    self.car.steering.turn(105)
+                    self.car.accelerator.go_forward(70)
+                    continue
                 else:
                     self.car.steering.turn(90)
-                    self.car.accelerator.go_forward(60)
+                    self.car.accelerator.go_forward(70)
+                    continue
 
             elif keyboard.is_pressed('s'):
                 if keyboard.is_pressed('a'):
-                    self.car.steering.turn(80)
-                    self.car.accelerator.go_backward(60)
-                    break;
+                    self.car.steering.turn(75)
+                    self.car.accelerator.go_backward(70)
+                    continue
                 elif keyboard.is_pressed('d'):
-                    self.car.steering.turn(100)
-                    self.car.accelerator.go_backward(60)
+                    self.car.steering.turn(105)
+                    self.car.accelerator.go_backward(70)
+                    continue
                 else:
                     self.car.steering.turn(90)
-                    self.car.accelerator.go_backward(60)
-
+                    self.car.accelerator.go_backward(70)
+                    continue
             elif keyboard.is_pressed('a'):
-                self.car.steering.turn(70)
-                self.car.accelerator.go_forward(60)
+                self.car.steering.turn(65)
+                self.car.accelerator.go_forward(70)
+                continue
 
             elif keyboard.is_pressed('d'):
-                self.car.steering.turn(110)
-                self.car.accelerator.go_forward(60)
+                self.car.steering.turn(115)
+                self.car.accelerator.go_forward(70)
+                continue
 
+            elif keyboard.is_pressed('q'):
+                self.car.accelerator.leftLarge()
+                continue
+
+            elif keyboard.is_pressed('e'):
+                self.car.accelerator.rightLarge()
+                continue
+
+            else:
+                self.car.accelerator.stop()
 
 
 
@@ -73,7 +91,7 @@ class myCar(object):
         self.car.steering.turn(90)
         #self.car.accelerator.go_backward(30)
         #time.sleep(0.6)
-        self.car.accelerator.rightLarge()
+        self.car.accelerator.leftLarge()
         time.sleep(self.adequate_time-0.2)
         self.car.accelerator.stop()
         time.sleep(1)
@@ -124,6 +142,8 @@ class myCar(object):
 
         elif self.car.line_detector.read_digital() == [1, 1, 1, 1, 1] :
             self.car.accelerator.stop()
+            if self.flag and self.dead_flag :
+                 self.finished = True
             return
             #time.sleep(10)
 
@@ -155,6 +175,9 @@ class myCar(object):
             distance = self.car.distance_detector.get_distance()
             print("distance: ", distance)
             print("")
+            if self.finished:
+                print("Finished")
+                break
             temp = []
 
             self.line_tracing()
@@ -196,7 +219,8 @@ class myCar(object):
 if __name__ == "__main__":
     try:
         myCar = myCar("CarName")
-        myCar.car_startup()
+        myCar.keyboard_control()
+        #myCar.car_startup()
 
     except KeyboardInterrupt:
         # when the Ctrl+C key has been pressed,
